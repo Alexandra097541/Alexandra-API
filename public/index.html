@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi primera API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #7bc7a0;
+            margin: 0;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .contenedor {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #06552a;
+        }
+
+        button {
+            background-color: #76eac8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3a30b0;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            background: #eef0ff;
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contenedor">
+        <h1>Mi primera API con Node.js</h1>
+        <p><strong>Desarrollador:</strong> Alexandra</p>
+        <p>Este proyecto es un servidor hecho con Node.js y Express que ofrece varios endpoints y se despliega en
+            Render.</p>
+
+        <button id="btnUsuarios">Recargar usuarios</button>
+
+        <ul id="listaUsuarios"></ul>
+        <h2>Productos</h2>
+        <ul id="listaProductos"></ul>
+    </div>
+
+    <script>
+        const boton = document.getElementById('btnUsuarios');
+        const lista = document.getElementById('listaUsuarios');
+
+        async function cargarUsuarios() {
+            try {
+                const respuesta = await fetch('/usuarios');
+                const usuarios = await respuesta.json();
+
+                lista.innerHTML = '';
+                usuarios.forEach((usuario) => {
+                    const li = document.createElement('li');
+                    li.textContent = usuario.id + ' - ' + usuario.nombre;
+                    lista.appendChild(li);
+                });
+            } catch (error) {
+                lista.innerHTML = '<li>No se pudieron cargar los usuarios</li>';
+            }
+        }
+
+        const listaProductos = document.getElementById('listaProductos');
+
+        async function cargarProductos() {
+            try {
+                const respuesta = await fetch('/productos');
+                const productos = await respuesta.json();
+
+                listaProductos.innerHTML = '';
+                productos.forEach((producto) => {
+                    const li = document.createElement('li');
+                    li.textContent = producto.nombre + ' - ' + producto.precio + ' $';
+                    listaProductos.appendChild(li);
+                });
+            } catch (error) {
+                listaProductos.innerHTML = '<li>No se pudieron cargar los productos</li>';
+            }
+        }
+
+        // Se ejecuta automáticamente al abrir la página
+        cargarUsuarios();
+        cargarProductos();
+
+        // El botón vuelve a cargar la lista
+        boton.addEventListener('click', cargarUsuarios);
+    </script>
+</body>
+
+</html>
